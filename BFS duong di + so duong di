@@ -18,31 +18,28 @@
 using namespace std;
 typedef long long ll;
 typedef double db;
-int a[1000][1000], n, u, v, check[1000] = {0}, truoc[1000];
+int a[1000][1000], n, u, v, check[1000] = {0}, truoc[1000] = {0};
 void sdd(){
-    int b[n][n];
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
+    int b[1000][1000];
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
             b[i][j] = 0;
             for(int k = 0; k < n; k++){
-                b[i][j] = a[i][k] * a[k][j];
+                b[i][j] += a[i][k] * a[k][j];
             }
         }
     }
-    ofstream ou("TK.OUT");  
-    ou << b[u][v];  
-    ou.close();  // Đóng file
+    cout << b[u][v];
 }
 void BFS(int u){
     queue<int> q;
     q.push(u);
     check[u] = 1;
-    truoc[u] = 0;
     while(!q.empty()){
         int s = q.front();
         q.pop();
         for(int i = 1; i <= n; i++){
-            if(a[s][i] && !check[i]){ // Sửa lại check[i] thay vì check[u]
+            if(a[s][i] && !check[i]){
                 q.push(i);
                 check[i] = 1;
                 truoc[i] = s;
@@ -50,29 +47,27 @@ void BFS(int u){
         }
     }
     vector<int> dd;
-    while(v){
-        dd.push_back(v);
-        v = truoc[v];
-    }
-    
-    ofstream ou("TK.OUT");  // Mở file để ghi
-    for(auto it = dd.rbegin(); it != dd.rend(); it++) 
-        ou << *it << " "; 
-    ou.close();  
+    if(truoc[v]){
+        while(v){
+            dd.push_back(v);
+            v = truoc[v];
+        }
+        
+        for(auto it = dd.rbegin(); it != dd.rend(); it++)
+            cout << *it << " ";
+    }else cout << 0;
 }
 int main(){
-    ifstream in("TK.INP");
-    ofstream ou("TK.OUT");
     int dk;
-    in >> dk;
-    in >> n >> u >> v;
+    cin >> dk;
+    cin >> n >> u >> v;
     for(int i = 1; i <= n; i++)
         for(int j = 1 ; j <= n; j++)
-            in >> a[i][j];
+            cin >> a[i][j];
     if(dk == 1)
         sdd();
     else
         BFS(u);
-    in.close();
+
     return 0;
 }
