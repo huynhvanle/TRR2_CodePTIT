@@ -1,0 +1,60 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <set>
+#include <cctype>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <cstring>
+#include <fstream>
+#include <stack>
+#include <queue>
+#define MOD 1000000007
+using namespace std;
+typedef long long ll;
+typedef double db;
+int a[1000][1000], n, check[1000] = {0}, lt = 0;
+vector<int> tp[100];
+void DFS_find(){
+    for(int start = 1; start <= n; start++){
+        if(!check[start]){
+            stack<int> s;
+            s.push(start);
+            check[start] = 1;
+            tp[lt].push_back(start);
+            while(!s.empty()){
+                int i = s.top();
+                s.pop();
+                for(int j = 1; j <= n; j++){
+                    if(a[i][j] && !check[j]){
+                        check[j] = 1;
+                        s.push(i);
+                        s.push(j);
+                        tp[lt].push_back(j);
+                        break;
+                    }
+                }
+            }
+            lt++;
+        }
+    }
+    cout << lt << endl;
+    for(int i = 0; i < lt; i++){
+        for(int x : tp[i])
+            cout << x << " ";
+        cout << endl;
+    }
+}
+int main(){
+    cin >> n;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+            cin >> a[i][j];
+    DFS_find();
+    return 0;
+}
