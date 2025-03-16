@@ -1,0 +1,89 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <set>
+#include <cctype>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <cstring>
+#include <fstream>
+#include <deque>
+#include <stack>
+#include <queue>
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+using namespace std;
+typedef long long ll;
+typedef double db;
+int v;
+int mtk[1000][1000];
+int check[1000] = {0};
+void mtk_vo_huong(){
+    for(int i = 1; i <= v; i++)
+        for(int j = 1; j <= v; j++)
+            if(mtk[i][j])
+                mtk[j][i] = 1;
+}
+void reset_check(){
+    for(int i = 1; i <= v; i++)
+        check[i] = 0;
+}
+void dfs(int u){
+    stack<int> s;
+    check[u] = 1;
+    s.push(u);
+    while(!s.empty()){
+        int a = s.top();
+        s.pop();
+        for(int i = 1; i <= v; i++){
+            if(!check[i] && mtk[a][i]){
+                check[i] = 1;
+                s.push(a);
+                s.push(i);
+                break;
+            }
+        }
+    }
+}
+bool check_lien_thong(){
+    for(int i = 1; i <= v; i++)
+        if(!check[i])
+            return 0;
+    return 1;
+}
+bool check_all_dinh(){
+    for(int u = 1; u <= v; u++){
+        reset_check();
+        dfs(u);
+        if(!check_lien_thong())
+            return 0;
+    }
+    return 1;
+}
+int kiemtra(){
+    if(check_all_dinh())
+        return 1;
+    else{
+        mtk_vo_huong();
+        if(check_all_dinh())
+            return 2;
+    }
+    return 0;
+}
+int main(){
+    cin >> v;
+    for(int i = 1; i <= v; i++)
+        for(int j = 1; j <= v; j++)
+            cin >> mtk[i][j];
+    cout << kiemtra();
+// 1 neu lien thong manh
+// 2 neu lien thong yeu
+// 0 neu ko lien thong manh cung ko lien thong yeu
+}
+
