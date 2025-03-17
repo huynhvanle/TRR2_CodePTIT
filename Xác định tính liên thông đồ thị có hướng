@@ -70,8 +70,11 @@ int kiemtra(){
         return 1;
     else{
         mtk_vo_huong();
-        if(check_all_dinh())
+        reset_check();
+        dfs(1);
+        if(check_lien_thong())
             return 2;
+
     }
     return 0;
 }
