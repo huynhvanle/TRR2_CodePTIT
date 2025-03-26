@@ -1,0 +1,128 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <set>
+#include <cctype>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <cstring>
+#include <fstream>
+#include <deque>
+#include <stack>
+#include <queue>
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+using namespace std;
+typedef long long ll;
+typedef double db;
+int ch[105][105];
+int vh[105][105];
+int dk, n, u;
+int check[105];
+vector<int> CE;
+struct dinh{
+    int ra = 0, vao = 0;
+};
+dinh x[105];
+void dfs(){
+    stack<int> a;
+    a.push(1);
+    check[1] = 1;
+    while(!a.empty()){
+        int s = a.top();
+        a.pop();
+        for(int i = 1; i <= n; i++){
+            if(!check[i] && vh[s][i]){
+                check[i] = 1;
+                a.push(s);
+                a.push(i);
+                break;
+            }
+        }
+    }
+}
+void find_el(){
+    stack<int> a;
+    a.push(u);
+    while(!a.empty()){
+        int s = a.top();
+        int dg = 0;
+        for(int i = 1; i <= n; i++){
+            if(ch[s][i]){
+                a.push(i);
+                ch[s][i] = 0;
+                dg = 1;
+            }
+        }
+        if(!dg){
+            CE.push_back(s);
+            a.pop();
+        }
+    }
+    for(auto it = CE.rbegin(); it != CE.rend(); ++it)
+        cout << *it << " ";
+}
+bool check_lien_thong(){
+    dfs();
+    for(int i = 1; i <= n; i++)
+        if(!check[i])
+            return 0;
+    return 1;
+}
+void check_el(){
+    int dg = 0;
+    if(check_lien_thong()){
+        dg = 1;
+        int a = 0, b = 0;
+        for(int i = 1; i <= n; i++){
+            if(x[i].ra != x[i].vao){
+                dg = 2;
+                if(x[i].ra - x[i].vao == 1)
+                    a++;
+                else if(x[i].vao - x[i].ra == 1)
+                    b++;
+            }
+        }
+        if(a != b && a != 1)
+            dg = 0;
+    }
+    cout << dg;
+}
+int main(){
+    cin >> dk >> n;
+    if(dk == 2){
+        cin >> u;
+    }
+    for(int i = 1; i <= n; i++){
+        int k; cin >> k;
+        while(k--){
+            int j; cin >> j;
+            ch[i][j] = 1;
+        }
+    }
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
+            if(ch[i][j]){
+                vh[i][j] = 1;
+                vh[j][i] = 1;
+            }
+        }
+    }
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
+            if(ch[i][j]){
+                x[i].ra++;
+                x[j].vao++;
+            }
+        }
+    }
+    if(dk == 1) check_el();
+    else if(dk == 2) find_el();
+}
