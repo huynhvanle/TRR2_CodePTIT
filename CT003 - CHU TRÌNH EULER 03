@@ -27,10 +27,7 @@ int vh[105][105];
 int dk, n, u;
 int check[105];
 vector<int> CE;
-struct dinh{
-    int ra = 0, vao = 0;
-};
-dinh x[105];
+
 void dfs(){
     stack<int> a;
     a.push(1);
@@ -59,6 +56,7 @@ void find_el(){
                 a.push(i);
                 ch[s][i] = 0;
                 dg = 1;
+                break;
             }
         }
         if(!dg){
@@ -80,18 +78,21 @@ void check_el(){
     int dg = 0;
     if(check_lien_thong()){
         dg = 1;
-        int a = 0, b = 0;
+        int a = 0, b = 0, res = 0;
         for(int i = 1; i <= n; i++){
-            if(x[i].ra != x[i].vao){
-                dg = 2;
-                if(x[i].ra - x[i].vao == 1)
-                    a++;
-                else if(x[i].vao - x[i].ra == 1)
-                    b++;
+            int ra = 0, vao = 0;;
+            for(int j = 1; j <= n; j++){
+              ra += ch[i][j];
+              vao += ch[j][i];
             }
+            int x = ra - vao;
+            if(x == 1) a++;
+            else if(x == -1) b++;
+            else if(x == 0) res++;
         }
-        if(a != b && a != 1)
-            dg = 0;
+        if(res == n) dg = 1;
+        else if(a == 1 && b == 1) dg = 2;
+        else dg = 0;
     }
     cout << dg;
 }
@@ -102,27 +103,14 @@ int main(){
     }
     for(int i = 1; i <= n; i++){
         int k; cin >> k;
-        while(k--){
+        for(int x = 0; x < k; x++){
             int j; cin >> j;
             ch[i][j] = 1;
+            vh[i][j] = 1;
+            vh[j][i] = 1;
         }
     }
-    for(int i = 1; i <= n; i++){
-        for(int j = 1; j <= n; j++){
-            if(ch[i][j]){
-                vh[i][j] = 1;
-                vh[j][i] = 1;
-            }
-        }
-    }
-    for(int i = 1; i <= n; i++){
-        for(int j = 1; j <= n; j++){
-            if(ch[i][j]){
-                x[i].ra++;
-                x[j].vao++;
-            }
-        }
-    }
+    
     if(dk == 1) check_el();
     else if(dk == 2) find_el();
 }
