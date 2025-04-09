@@ -12,37 +12,48 @@
 #include <unordered_set>
 #include <cstring>
 #include <fstream>
+#include <deque>
 #include <stack>
 #include <queue>
+#include <stdio.h>
 #define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
 using namespace std;
 typedef long long ll;
 typedef double db;
-int a[1000][1000], dk, n, u, v, check[1000] = {0}, truoc[1000] = {0};
-void sdd(){
-    int tich[n][n];
+typedef float fl;
+
+int mtk[101][101];
+int t, n, u, v;
+int check[101], truoc[101];
+
+void find_1(){
+    int tmp[101][101];
     for(int i = 1; i <= n; i++){
         for(int j = 1; j <= n; j++){
-            tich[i][j] = 0;
+            tmp[i][j] = 0;
             for(int k = 1; k <= n; k++)
-                tich[i][j] += a[i][k] * a[k][j];
+                tmp[i][j] += mtk[i][k] * mtk[k][j];
         }
     }
-    cout << tich[u][v];
+    cout << tmp[u][v];
 }
-void dfs(){
+
+void find_2(){
     stack<int> s;
     s.push(u);
     check[u] = 1;
     while(!s.empty()){
         int i = s.top();
         s.pop();
-        for(int j = 1; j <=n; j++){
-            if(a[i][j] && !check[j]){
+        for(int j = 1; j <= n ; j++){
+            if(mtk[i][j] && !check[j]){
                 check[j] = 1;
+                truoc[j] = i;
                 s.push(i);
                 s.push(j);
-                truoc[j] = i;
                 break;
             }
         }
@@ -53,20 +64,25 @@ void dfs(){
             dd.push_back(v);
             v = truoc[v];
         }
-        for(auto it = dd.rbegin(); it != dd.rend(); it++)
-            cout << *it << " ";
+        reverse(all(dd));
+        for(int x : dd)
+            cout << x << " ";
     }else
         cout << 0;
 }
-int main(){
-    cin >> dk >> n >> u >> v;
+
+int main() {
+    freopen("TK.INP", "r", stdin);
+    freopen("TK.OUT", "w", stdout);
+    cin >> t >> n >> u >> v;
     for(int i = 1; i <= n; i++)
         for(int j = 1; j <= n; j++)
-            cin >> a[i][j];
-    if(dk == 1)
-        sdd();
-    else
-        dfs();
+            cin >> mtk[i][j];
+    
+    if(t == 1)
+        find_1();
+    else if(t == 2){
+        find_2();
+    }
     return 0;
 }
-
