@@ -1,0 +1,101 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <set>
+#include <cctype>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <cstring>
+#include <fstream>
+#include <deque>
+#include <stack>
+#include <queue>
+#include <stdio.h>
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+using namespace std;
+typedef long long ll;
+typedef double db;
+typedef float fl;
+
+int n;
+int a[101][101];
+int check[101];
+
+void reset_check(){
+    for(int i = 1; i <= n; i++)
+        check[i] = 0;
+}
+
+void make_vh(){
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++){
+            if(a[i][j]){
+                a[j][i] = a[i][j] = 1;
+            }
+        }
+}
+
+void dfs(int u){
+    set<int> tmp;
+    stack<int> s;
+    s.push(u);
+    check[u] = 1;
+    while(!s.empty()){
+        int i = s.top();
+        s.pop();
+        for(int j = 1; j <= n; j++){
+            if(!check[j] && a[i][j]){
+                check[j] = 1;
+                s.push(i);
+                s.push(j);
+                break;
+            }
+        }
+    }
+}
+
+int check_lt(){
+    for(int i = 1; i <= n; i++)
+        if(!check[i])
+            return 0;
+    return 1;
+}
+
+void check_all(){
+    int dg = 1;
+    for(int i = 1; i <= n; i++){
+        reset_check();
+        dfs(i);
+        if(!check_lt()){
+            dg = 2;
+            break;
+        }
+    }
+    if(dg == 2){
+        make_vh();
+        reset_check();
+        dfs(1);
+        if(!check_lt())
+            dg = 0;
+    }
+    cout << dg;
+}
+
+int main() {
+    freopen("TK.INP", "r", stdin);
+    freopen("TK.OUT", "w", stdout);
+    cin >> n;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+            cin >> a[i][j];
+    check_all();
+    return 0;
+}
