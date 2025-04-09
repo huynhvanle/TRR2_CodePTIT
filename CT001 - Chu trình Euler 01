@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #define all(x) x.begin(), x.end()
+using namespace std;
 
 int vh[105][105];
 int dk, n, c, u;
