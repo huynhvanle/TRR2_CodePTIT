@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+#define all(x) x.begin(), x.end()
+
+int main() {
+    freopen("DT.INP", "r", stdin);
+    freopen("DT.OUT", "w", stdout);
+    int t, n;
+    cin >> t >> n;
+    int mts[101][101];
+    int c ; cin >> c;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++){
+            if(i != j) mts[i][j] = 10000;
+            else mts[i][j] = 0;
+        }
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= c; j++){
+            int x, y, z;
+            cin >> x >> y >> z;
+            mts[x][y] = z;
+        }
+    }
+    if(t == 1){
+        for(int i = 1; i <= n; i++){
+            int deg1 = 0, deg2 = 0;
+            for(int j = 1; j <= n; j++){
+                if(mts[i][j] > 0 && mts[i][j] <= 50) deg1++;
+                if(mts[j][i] > 0 && mts[j][i] <= 50) deg2++;
+            }
+            cout << deg2 << " " << deg1 << endl;
+        }
+    }else if(t == 2){
+        cout << n << endl;
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= n; j++){
+                cout << mts[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+    return 0;
+}
