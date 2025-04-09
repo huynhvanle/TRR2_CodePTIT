@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+#define all(x) x.begin(), x.end()
+
+int n, u;
+int check[101];
+int kq[101], kqtmp[101];;
+int res = 1e9;
+int mts[101][101];
+
+void find(int i){
+    for(int j = 1; j <= n; j++){
+        if(mts[kqtmp[i - 1]][j] > 0 && mts[kqtmp[i - 1]][j] <= 50){
+            if(!check[j]){
+                kqtmp[i] = j;
+                check[j] = 1;
+                find(i + 1);
+                check[j] = 0;
+            }
+            else if(i == n + 1 && j == u){
+                int sum = 0;
+                for(int k = 1; k < n; k++)
+                    sum += mts[kqtmp[k]][kqtmp[k + 1]];
+                sum += mts[kqtmp[n]][u];
+                if(sum < res){
+                    res = sum;
+                    for(int k = 1; k <= n; k++)
+                        kq[k] = kqtmp[k];
+                }
+            }
+        }
+    }
+}
+int main(){
+    cin >> n >> u;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+            cin >> mts[i][j];
+    check[u] = 1;
+    kqtmp[1] = u;
+    find(2);
+    if(!kq[1]) cout << 0;
+    else{
+        cout << res << endl;
+        for(int i = 1; i <= n; i++)
+            cout << kq[i] << " ";
+        cout << u;
+    }
+}
