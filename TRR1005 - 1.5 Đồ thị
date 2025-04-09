@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+#define all(x) x.begin(), x.end()
+
+int main() {
+    freopen("DT.INP", "r", stdin);
+    freopen("DT.OUT", "w", stdout);
+    int mtk[200][200];
+    int n, t, c;
+    cin >> t >> n >> c;
+    vector<int> dsk[101];
+    for(int i = 0; i < c; i++){
+        int x, y;
+        cin >> x >> y;
+        mtk[x][y] = 1;
+        mtk[y][x] = 1;
+    }
+    if(t == 1){
+        for(int i = 1; i <= n; i++){
+            int bac = 0;
+            for(int j = 1; j <= n; j++){
+                if(mtk[i][j])
+                    bac++;
+            }
+            cout << bac << " ";
+        }
+    }else if(t == 2){
+        cout << n << endl;
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= n; j++){
+                if(mtk[i][j]){
+                    dsk[i].push_back(j);
+                }
+            }
+        }
+        for(int i = 1; i <= n ; i++){
+            cout << dsk[i].size() << " ";
+            for(int x : dsk[i])
+                cout << x << " ";
+            cout << endl;
+        }
+    }
+    return 0;
+}
