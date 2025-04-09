@@ -1,0 +1,76 @@
+#include <bits/stdc++.h.>
+#define all(x) x.begin(), x.end()
+
+int n;
+int a[101][101];
+bool check[101];
+vector<pair<int, int>> dsc;
+vector<pair<int, int>> bridges;
+
+void reset_check() {
+    for(int i = 1; i <= n; i++)
+        check[i] = 0;
+}
+
+void dfs(int u) {
+    stack<int> s;
+    s.push(u);
+    check[u] = 1;
+    while(!s.empty()){
+        int i = s.top();
+        s.pop();
+        for(int j = 1; j <= n; j++){
+            if(!check[j] && a[i][j]){
+                check[j] = 1;
+                s.push(i);
+                s.push(j);
+                break;
+            }
+        }
+    }
+}
+
+int dem_lt(){
+    int cnt = 0;
+    for(int i = 1; i <= n; i++){
+        if(!check[i]){
+            cnt++;
+            dfs(i);
+        }
+    }
+    return cnt;
+}
+
+void find_bridges(){
+    int original_lt = dem_lt();
+    for(pair<int,int> x : dsc){
+        int i = x.first;
+        int j = x.second;
+        a[i][j] = a[j][i] = 0;
+        reset_check();
+        int new_lt = dem_lt();
+        if(new_lt > original_lt){
+            bridges.push_back({i, j});
+        }
+        a[i][j] = a[j][i] = 1;
+    }
+    cout << bridges.size() << endl;
+    for(pair<int,int> x : bridges)
+        cout << x.first << " " << x.second << endl;
+        
+}
+
+int main() {
+    freopen("TK.INP", "r", stdin);
+    freopen("TK.OUT", "w", stdout);
+
+    cin >> n;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++) {
+            cin >> a[i][j];
+            if(j > i && a[i][j]){
+                dsc.push_back({i,j});
+            }
+        }
+    find_bridges();
+}
