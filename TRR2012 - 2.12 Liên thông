@@ -1,0 +1,76 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <set>
+#include <cctype>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <cstring>
+#include <fstream>
+#include <deque>
+#include <stack>
+#include <queue>
+#include <stdio.h>
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+using namespace std;
+typedef long long ll;
+typedef double db;
+typedef float fl;
+
+int n;
+int a[101][101];
+int check[101];
+
+vector<set<int>> rs;
+
+void bfs(int u){
+    set<int> tmp;
+    tmp.insert(u);
+    queue<int> q;
+    q.push(u);
+    check[u] = 1;
+    while(!q.empty()){
+        int i = q.front();
+        q.pop();
+        for(int j = 1; j <= n; j++){
+            if(a[i][j] && !check[j]){
+                check[j] = 1;
+                tmp.insert(j);
+                q.push(j);
+            }
+        }
+    }
+    rs.push_back(tmp);
+}
+
+void find_lt(){
+    for(int i = 1; i <= n; i++){
+        if(!check[i]){
+            bfs(i);
+        }
+    }
+    cout << rs.size() << endl;
+    for(set<int> x : rs){
+        for(int y : x)
+            cout << y << " ";
+        cout << endl;
+    }
+}
+
+int main() {
+    freopen("TK.INP", "r", stdin);
+    freopen("TK.OUT", "w", stdout);
+    cin >> n;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+            cin >> a[i][j];
+    find_lt();
+}
