@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+#define all(x) x.begin(), x.end()
+using namespace std;
+
+int n;
+int a[101][101];
+int check[101];
+
+vector<pair<int,int>> edge_list;
+vector<pair<int,int>> bridges;
+
+void reset_check(){
+    for(int i = 1; i <= n; i++)
+        check[i] = 0;
+}
+
+void bfs(int u){
+    queue<int> q;
+    q.push(u);
+    check[u] = 1;
+    while(!q.empty()){
+        int i = q.front();
+        q.pop();
+        for(int j = 1; j <= n; j++){
+            if(a[i][j] && !check[j]){
+                check[j] = 1;
+                q.push(j);
+            }
+        }
+    }
+}
+
+int count_components(){
+    int cnt = 0;
+    for(int i = 1; i <= n; i++){
+        if(!check[i]){
+            cnt++;
+            bfs(i);
+        }
+    }
+    return cnt;
+}
+
+void find_bridges(){
+    int original_components = count_components();
+    for(pair<int,int> x : edge_list){
+        reset_check();
+        int i = x.first;
+        int j = x.second;
+        a[i][j] = a[j][i] = 0;
+        int new_components = count_components();
+        if(new_components > original_components){
+            bridges.push_back({i,j});
+        }
+        a[i][j] = a[j][i] = 1;
+    }
+    cout << bridges.size() << endl;
+    for(pair <int,int> x : bridges)
+        cout << x.first << " " << x.second << endl;
+}
+
+int main() {
+    freopen("TK.INP", "r", stdin);
+    freopen("TK.OUT", "w", stdout);
+    cin >> n;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++){
+            cin >> a[i][j];
+            if(i < j && a[i][j]){
+                edge_list.push_back({i,j});
+            }
+        }
+    find_bridges();
+    return 0;
+}
