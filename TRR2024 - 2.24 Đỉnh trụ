@@ -1,0 +1,88 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <set>
+#include <cctype>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <cstring>
+#include <fstream>
+#include <deque>
+#include <stack>
+#include <queue>
+#include <stdio.h>
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+using namespace std;
+typedef long long ll;
+typedef double db;
+typedef float fl;
+
+int n;
+int a[101][101];
+int check[101];
+
+set<int> pillar;
+
+void reset_check(){
+    for(int i = 1; i <= n; i++)
+        check[i] = 0;
+}
+
+void bfs(int u){
+    queue<int> q;
+    q.push(u);
+    check[u] = 1;
+    while(!q.empty()){
+        int i = q.front();
+        q.pop();
+        for(int j = 1; j <= n; j++){
+            if(!check[j] && a[i][j]){
+                q.push(j);
+                check[j] = 1;
+            }
+        }
+    }
+}
+
+int count_components(){
+    int cnt = 0;
+    for(int i = 1; i <= n; i++){
+        if(!check[i]){
+            cnt++;
+            bfs(i);
+        }
+    }
+    return cnt;
+}
+
+void find_pillar(){
+    int original_components = count_components();
+    for(int i = 1; i <= n; i++){
+        reset_check();
+        check[i] = 1;
+        int new_components = count_components();
+        if(new_components > original_components)
+            pillar.insert(i);
+    }
+    cout << pillar.size() << endl;
+    for(int x : pillar)
+        cout << x << " ";
+}
+
+int main() {
+    freopen("TK.INP", "r", stdin);
+    freopen("TK.OUT", "w", stdout);
+    cin >> n;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n ; j++)
+            cin >> a[i][j];
+    find_pillar();
+}
