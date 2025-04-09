@@ -1,0 +1,59 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <set>
+#include <cctype>
+#include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <cstring>
+#include <fstream>
+#include <deque>
+#include <stack>
+#include <queue>
+#include <stdio.h>
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+using namespace std;
+typedef long long ll;
+typedef double db;
+typedef float fl;
+
+
+int main() {
+    freopen("DT.INP", "r", stdin);
+    freopen("DT.OUT", "w", stdout);
+    int mtk[101][101];
+    int t, n;
+    cin >> t >> n;
+    int c = 0;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++){
+            cin >> mtk[i][j];
+            if(j > i && mtk[i][j])
+                c++;
+        }
+    if(t == 1){
+        for(int i = 1; i <= n; i++){
+            int bac = 0;
+            for(int j = 1; j <= n; j++){
+                if(mtk[i][j])
+                    bac++;
+            }
+            cout << bac << " ";
+        }
+    }else if(t == 2){
+        cout << n << " " << c - 1 << endl;
+        for(int i = 1; i <= n; i++)
+            for(int j = i + 1; j <= n; j++)
+                if(mtk[i][j])
+                    cout << i << " " << j << endl;
+    }
+    return 0;
+}
