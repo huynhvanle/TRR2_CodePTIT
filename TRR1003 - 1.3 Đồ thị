@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+#define all(x) x.begin(), x.end()
+using namespace std;
+
+int main() {
+    freopen("DT.INP", "r", stdin);
+    freopen("DT.OUT", "w", stdout);
+    int mtk[200][200];
+    int n, t;
+    vector<pair<int,int>> dsc;
+    cin >> t >> n;
+
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++){
+            cin >> mtk[i][j];
+            if(mtk[i][j] && j > i){
+                dsc.push_back({i,j});
+            }
+        }
+    if(t == 1){
+        for(int i = 1; i <= n; i++){
+            int bac = 0;
+            for(int j = 1; j <= n; j++){
+                if(mtk[i][j])
+                    bac++;
+            }
+            cout << bac << " ";
+        }
+    }else if(t == 2){
+        cout << n << " " << dsc.size() << endl;
+        int a[200][200];
+        for(int i = 1; i <= n; i++){
+            int j = 1;
+            for(pair<int,int> x : dsc){
+                if(i == x.first || i == x.second)
+                    a[i][j] = 1;
+                j++;
+            }
+        }
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= dsc.size(); j++)
+                cout << a[i][j] << " ";
+            cout << endl;
+        }
+    }
+    return 0;
+}
