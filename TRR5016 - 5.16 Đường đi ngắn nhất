@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+#define reset(x) memset(x, 0, sizeof(x))
+#define fi first
+#define se second
+#define ll long long
+#define db double
+#define fl float
+
+int n;
+int a[101][101];
+int check[101];
+int d[101][101], p[101][101];
+
+void floyd(){
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
+            d[i][j] = a[i][j];
+            if(a[i][j] != 10000)
+                p[i][j] = i;
+            else
+                p[i][j] = -1;
+        }
+    }
+    for(int k = 1; k <= n; k++){
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= n; j++){
+                if(d[i][j] > d[i][k] + d[k][j]){
+                    d[i][j] = d[i][k] + d[k][j];
+                    p[i][j] = p[k][j];
+                }
+            }
+        }
+    }
+    int maxd = -1e9;
+    int x = 0, y = 0;
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
+            if(i != j && d[i][j] < 10000){
+                if(d[i][j] > maxd){
+                    x = i;
+                    y = j;
+                    maxd = d[i][j];
+                }
+            }
+        }
+    }
+    if(!x){
+        cout << 0;
+        return;
+    }
+    cout << x << " " << y << " " << maxd << endl;
+    vector<int> dd;
+    while(y != x){
+        dd.push_back(y);
+        y = p[x][y];
+    }
+    dd.push_back(x);
+    reverse(all(dd));
+    for(int x : dd) cout << x << " ";
+}
+
+int main(){
+     freopen("DN.INP","r",stdin);
+     freopen("DN.OUT","w",stdout);
+    cin >> n;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+            cin >> a[i][j];
+    floyd();
+}
