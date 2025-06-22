@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+#define reset(x) memset(x, 0, sizeof(x))
+#define fi first
+#define se second
+#define ll long long
+#define db double
+#define fl float
+int n, u;
+int a[101][101];
+int check[101];
+struct canh{
+    int x, y, w;
+};
+
+void prim(){
+    vector<canh> rs;
+    check[u] = 1;
+    int d = 0;
+    while(rs.size() != n - 1){
+        int minw = 1e9;
+        int x1 = 0, x2 = 0;
+        for(int i = 1; i <= n; i++){
+            if(check[i]){
+                for(int j = 1; j <= n; j++){
+                    if(a[i][j] != 0 && a[i][j] != 10000 && !check[j])
+                        if(a[i][j] < minw){
+                            minw = a[i][j];
+                            x1 = i, x2 = j;
+                        }
+                }
+            }
+        }
+        if(!x1 && !x2) break;
+        d += minw;
+        check[x2] = 1;
+        rs.push_back({min(x1,x2), max(x1,x2), minw});
+    }
+    if(rs.size() != n - 1) cout << 0;
+    else{
+        cout << d << endl;
+        for(canh X : rs)
+            cout << X.x << " " << X.y << " " << X.w << endl;
+    }
+}
+
+int main(){
+    freopen("CK.INP","r",stdin);
+    freopen("CK.OUT","w",stdout);
+    cin >> n >> u;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+            cin >> a[i][j];
+    prim();
+    
+}
