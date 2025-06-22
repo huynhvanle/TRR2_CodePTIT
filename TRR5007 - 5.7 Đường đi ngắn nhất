@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+#define reset(x) memset(x, 0, sizeof(x))
+#define fi first
+#define se second
+#define ll long long
+#define db double
+#define fl float
+
+int n, s, t;
+int a[101][101];
+int check[101];
+int d[101], p[101];
+
+void bell(){
+    for(int i = 1; i <= n; i++){
+        d[i] = a[s][i];
+        p[i] = s;
+    }
+    p[s] = 0;
+    for(int k = 1; k <= n - 2; k++){
+        for(int i = 1; i <= n; i++){
+            if(i != s){
+                for(int j = 1; j <= n; j++){
+                    if(j != s && j != i){
+                        if(d[j] > d[i] + a[i][j]){
+                            d[j] = d[i] + a[i][j];
+                            p[j] = i;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // ktra ct am
+    for(int i = 1; i <= n; i++){
+        for(int j = 1; j <= n; j++){
+            if(d[j] > d[i] + a[i][j]){
+                cout << -1 ;
+                return;
+            }
+        }
+    }
+    if(d[t] >= 10000){
+      cout << 0;
+      return;
+    }
+    cout << d[t] << endl;
+    vector<int> dd;
+    while(t){
+      dd.push_back(t);
+      t = p[t];
+    }
+    reverse(all(dd));
+    for(int x : dd)
+       cout << x << " ";
+    
+}
+int main(){
+    freopen("BN.INP","r",stdin);
+    freopen("BN.OUT","w",stdout);
+    cin >> n >> s >> t;
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= n; j++)
+            cin >> a[i][j];
+    bell();
+}
