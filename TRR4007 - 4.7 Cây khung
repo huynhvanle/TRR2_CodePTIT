@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define MOD 1000000007
+#define run() int t; cin >> t; while(t--)
+#define fast() ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define all(x) x.begin(), x.end()
+#define reset(x) memset(x, 0, sizeof(x))
+#define fi first
+#define se second
+#define ll long long
+#define db double
+#define fl float
+struct canh{
+    int x, y, w;
+};
+int n, c;
+canh a[1001];
+int check[1001];
+int lev[1001];
+int par[1001];
+vector<canh> rs;
+
+bool cmp(canh a, canh b){
+    return a.w < b.w;
+}
+
+int Find(int u){
+    if(u == par[u]) return u;
+    else return par[u] = Find(par[u]);
+}
+
+int uni(int a, int b){
+    a = Find(a);
+    b = Find(b);
+    if(a == b) return 0;
+    if(lev[a] < lev[b]) swap(a,b);
+    par[b] = a;
+    lev[a] += lev[b];
+    return 1;
+}
+
+int main(){
+    freopen("CK.INP","r",stdin);
+    freopen("CK.OUT","w",stdout);
+    cin >> n >> c;
+    for(int i = 0; i < c; i++){
+        cin >> a[i].x >> a[i].y >> a[i].w;
+    }
+    stable_sort(a, a + c, cmp);
+    for(int i = 1; i <= n; i++){
+        lev[i] = 1;
+        par[i] = i;
+    }
+    int d = 0;
+    for(int i = 0; i < c; i++){
+        if(uni(a[i].x, a[i].y)){
+            d += a[i].w;
+            rs.push_back(a[i]);
+        }
+    }
+    cout << d << endl;
+    for(canh X : rs)
+        cout << X.x << " " << X.y << " " << X.w << endl;
+}
